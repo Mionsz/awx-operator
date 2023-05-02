@@ -1,10 +1,4 @@
-# VERSION defines the project version for the bundle.
-# Update this value when you upgrade the version of your project.
-# To re-generate a bundle for another specific version without changing the standard setup, you can:
-# - use the VERSION as arg of the bundle target (e.g make bundle VERSION=0.0.2)
-# - use environment variables to overwrite this value (e.g export VERSION=0.0.2)
-VERSION ?= $(shell git describe --tags)
-
+VERSION ?= latest
 CONTAINER_CMD ?= docker
 
 # GNU vs BSD in-place sed
@@ -38,11 +32,11 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 #
 # For example, running 'make bundle-build bundle-push catalog-build catalog-push' will build and push both
 # ansible.com/awx-operator-bundle:$VERSION and ansible.com/awx-operator-catalog:$VERSION.
-IMAGE_TAG_BASE ?= quay.io/ansible/awx-operator
+IMAGE_TAG_BASE ?= ger-is-registry.caas.intel.com/npgcn/ds/ansible/awx-operator
 
 # BUNDLE_IMG defines the image:tag used for the bundle.
 # You can use it as an arg. (E.g make bundle-build BUNDLE_IMG=<some-registry>/<project-name-bundle>:<tag>)
-BUNDLE_IMG ?= $(IMAGE_TAG_BASE)-bundle:v$(VERSION)
+BUNDLE_IMG ?= $(IMAGE_TAG_BASE)-bundle:$(VERSION)
 
 # BUNDLE_GEN_FLAGS are the flags passed to the operator-sdk generate bundle command
 BUNDLE_GEN_FLAGS ?= -q --overwrite --version $(VERSION) $(BUNDLE_METADATA_OPTS)
@@ -57,11 +51,11 @@ endif
 
 # Image URL to use all building/pushing image targets
 IMG ?= $(IMAGE_TAG_BASE):$(VERSION)
-NAMESPACE ?= awx
+NAMESPACE ?= automation
 
 # Helm variables
-CHART_NAME ?= awx-operator
-CHART_DESCRIPTION ?= A Helm chart for the AWX Operator
+CHART_NAME ?= cesg-awx-operator
+CHART_DESCRIPTION ?= Data Services CESG Intel Poland Helm chart for the AWX Operator deployment
 CHART_OWNER ?= $(GH_REPO_OWNER)
 CHART_REPO ?= awx-operator
 CHART_BRANCH ?= gh-pages

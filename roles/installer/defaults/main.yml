@@ -9,7 +9,7 @@ database_username: "{{ deployment_type }}"
 task_privileged: false
 service_type: ClusterIP
 ingress_type: none
-ingress_class_name: ''
+ingress_class_name: 'nginx'
 ingress_path: '/'
 ingress_path_type: 'Prefix'
 ingress_api_version: 'networking.k8s.io/v1'
@@ -25,10 +25,9 @@ service_account_annotations: ''
 service_labels: ''
 
 # Add annotations to the ingress. Specify as literal block. E.g.:
-# ingress_annotations: |
-#   kubernetes.io/ingress.class: nginx
-#   nginx.ingress.kubernetes.io/proxy-connect-timeout: 60s
-ingress_annotations: ''
+ingress_annotations: |
+  kubernetes.io/ingress.class: nginx
+  nginx.ingress.kubernetes.io/proxy-connect-timeout: 60s
 
 # TLS secret for the ingress. The secret either has to exist before hand with
 # the corresponding cert and key or just be an indicator for where an automated
@@ -45,7 +44,7 @@ loadbalancer_port: '80'
 service_annotations: ''
 
 # Port to be used for NodePort configuration, default is to auto-assign a port between 30000-32768
-# nodeport_port: '30080'
+nodeport_port: '30850'
 
 # The TLS termination mechanism to use to access
 # the services. Supported mechanism are: edge, passthrough
@@ -128,15 +127,32 @@ web_topology_spread_constraints: ''
 #     operator: "Equal"
 #     value: "AWX"
 #     effect: "NoSchedule"
-tolerations: ''
-
+tolerations: |
+  - key: "node-role.kubernetes.io/master"
+    operator: "Exists"
+    effect: "NoSchedule"
+  - key: "node-role.kubernetes.io/control-plane"
+    operator: "Exists"
+    effect: "NoSchedule"
+  - key: "docker-registry"
+    operator: "Exists"
+    effect: "NoSchedule"
 # Add node tolerations for the task pods. Specify as literal block. E.g.:
 # task_tolerations: |
 #   - key: "dedicated"
 #     operator: "Equal"
 #     value: "AWXtask"
 #     effect: "NoSchedule"
-task_tolerations: ''
+task_tolerations: |
+  - key: "node-role.kubernetes.io/master"
+    operator: "Exists"
+    effect: "NoSchedule"
+  - key: "node-role.kubernetes.io/control-plane"
+    operator: "Exists"
+    effect: "NoSchedule"
+  - key: "docker-registry"
+    operator: "Exists"
+    effect: "NoSchedule"
 
 # Add node tolerations for the web pods. Specify as literal block. E.g.:
 # web_tolerations: |
@@ -144,7 +160,16 @@ task_tolerations: ''
 #     operator: "Equal"
 #     value: "AWXweb"
 #     effect: "NoSchedule"
-web_tolerations: ''
+web_tolerations: |
+  - key: "node-role.kubernetes.io/master"
+    operator: "Exists"
+    effect: "NoSchedule"
+  - key: "node-role.kubernetes.io/control-plane"
+    operator: "Exists"
+    effect: "NoSchedule"
+  - key: "docker-registry"
+    operator: "Exists"
+    effect: "NoSchedule"
 
 # Add affinities for all pods
 #  affinity:
@@ -289,24 +314,24 @@ rsyslog_command: []
 
 task_resource_requirements:
   requests:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 250m
+    memory: 256Mi
 
 web_resource_requirements:
   requests:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 250m
+    memory: 256Mi
 
 ee_resource_requirements:
   requests:
-    cpu: 100m
-    memory: 64Mi
+    cpu: 250m
+    memory: 128Mi
 
 # TODO: validate default resource requirements
 rsyslog_resource_requirements:
   requests:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 350m
+    memory: 256Mi
 
 # Customize CSRF options
 csrf_cookie_secure: False
@@ -317,8 +342,8 @@ control_plane_priority_class: ''
 
 redis_resource_requirements:
   requests:
-    cpu: 50m
-    memory: 64Mi
+    cpu: 250m
+    memory: 128Mi
 # Add extra environment variables to the AWX task/web containers. Specify as
 # literal block. E.g.:
 # task_extra_env: |
@@ -326,9 +351,34 @@ redis_resource_requirements:
 #     value: bar
 #   - name: BAZ
 #     value: bing
-task_extra_env: ''
-web_extra_env: ''
-ee_extra_env: ''
+task_extra_env: |
+  - name: "NO_PROXY"
+    value: "intel.com,.intel.com,10.0.0.0/8,192.168.0.0/16,localhost,.local,127.0.0.0/8,172.16.0.0/12,134.134.0.0/16"
+  - name: "HTTPS_PROXY"
+    value: "http://proxy-mu.intel.com:912"
+  - name: "HTTP_PROXY"
+    value: "http://proxy-mu.intel.com:911"
+  - name: "SOCKS_PROXY"
+    value: "http://proxy-mu.intel.com:1080"
+web_extra_env: |
+  - name: "NO_PROXY"
+    value: "intel.com,.intel.com,10.0.0.0/8,192.168.0.0/16,localhost,.local,127.0.0.0/8,172.16.0.0/12,134.134.0.0/16"
+  - name: "HTTPS_PROXY"
+    value: "http://proxy-mu.intel.com:912"
+  - name: "HTTP_PROXY"
+    value: "http://proxy-mu.intel.com:911"
+  - name: "SOCKS_PROXY"
+    value: "http://proxy-mu.intel.com:1080"
+ee_extra_env: |
+  - name: "NO_PROXY"
+    value: "intel.com,.intel.com,10.0.0.0/8,192.168.0.0/16,localhost,.local,127.0.0.0/8,172.16.0.0/12,134.134.0.0/16"
+  - name: "HTTPS_PROXY"
+    value: "http://proxy-mu.intel.com:912"
+  - name: "HTTP_PROXY"
+    value: "http://proxy-mu.intel.com:911"
+  - name: "SOCKS_PROXY"
+    value: "http://proxy-mu.intel.com:1080"
+
 
 # Mount extra volumes on the AWX task/web containers. Specify as literal block.
 # E.g.:
@@ -358,18 +408,27 @@ postgres_keep_pvc_after_upgrade: True
 #     operator: "Equal"
 #     value: "AWX"
 #     effect: "NoSchedule"
-postgres_tolerations: ''
+postgres_tolerations: |
+  - key: "node-role.kubernetes.io/master"
+    operator: "Exists"
+    effect: "NoSchedule"
+  - key: "node-role.kubernetes.io/control-plane"
+    operator: "Exists"
+    effect: "NoSchedule"
+  - key: "docker-registry"
+    operator: "Exists"
+    effect: "NoSchedule"
 postgres_storage_requirements:
   requests:
     storage: 8Gi
 postgres_resource_requirements:
   requests:
-    cpu: 10m
-    memory: 64Mi
+    cpu: 200m
+    memory: 128Mi
 postgres_init_container_resource_requirements:
   requests:
-    cpu: 10m
-    memory: 64Mi
+    cpu: 100m
+    memory: 128Mi
 # Assign a preexisting priority class to the postgres pod
 postgres_priority_class: ''
 postgres_data_path: '/var/lib/postgresql/data/pgdata'

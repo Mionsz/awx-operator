@@ -1,0 +1,37 @@
+---
+apiVersion: awx.ansible.com/v1beta1
+kind: AWX
+metadata:
+  name: cesg-awx
+  namespace: automation
+spec:
+  web_resource_requirements:
+    requests:
+      cpu: 250m
+      memory: 256M
+  task_resource_requirements:
+    requests:
+      cpu: 250m
+      memory: 256M
+  ee_resource_requirements:
+    requests:
+      cpu: 250m
+      memory: 128M
+
+  replicas: 1
+  admin_user: admin
+  admin_password_secret: awx-admin-password
+
+  ingress_type: ingress
+  ingress_tls_secret: awx-cesg-fqdn-secret-tls
+  hostname: awx.cesg-poland.igk.intel.com
+
+  postgres_configuration_secret: awx-postgres-configuration
+
+  postgres_storage_class: awx-postgres-volume
+  postgres_storage_requirements:
+    requests:
+      storage: 10Gi
+  projects_persistence: true
+  projects_existing_claim: awx-projects-claim
+
