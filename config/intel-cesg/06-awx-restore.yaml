@@ -1,0 +1,15 @@
+apiVersion: awx.ansible.com/v1beta1
+kind: AWXRestore
+metadata:
+  name: cesg-awx-restore
+  namespace: automation
+spec:
+  deployment_name: restored-cesg-awx
+  backup_name: cesg-awx-backup
+  restore_resource_requirements:
+    limits:
+      cpu: "2000m"
+      memory: "4096Mi"
+    requests:
+      cpu: "250m"
+      memory: "64Mi"

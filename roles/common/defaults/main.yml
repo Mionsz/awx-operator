@@ -4,5 +4,5 @@ kind: 'AWX'
 api_version: '{{ deployment_type }}.ansible.com/v1beta1'
 
 # Used to determine some cluster specific logic regarding projects_persistence pvc permissions
-is_k8s: false
+is_k8s: true
 is_openshift: false
