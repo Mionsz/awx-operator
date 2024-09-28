@@ -95,7 +95,7 @@ run: ansible-operator ## Run against the configured Kubernetes cluster in ~/.kub
 
 .PHONY: docker-build
 docker-build: ## Build docker image with the manager.
-	${CONTAINER_CMD} build $(BUILD_ARGS) -t ${IMG} .
+	${CONTAINER_CMD} build --build-arg no_proxy --build-arg http_proxy --build-arg https_proxy $(BUILD_ARGS) -t ${IMG} .
 
 .PHONY: docker-push
 docker-push: ## Push docker image with the manager.
@@ -112,7 +112,7 @@ PLATFORMS ?= linux/arm64,linux/amd64,linux/s390x,linux/ppc64le
 docker-buildx: ## Build and push docker image for the manager for cross-platform support
 	- docker buildx create --name project-v3-builder
 	docker buildx use project-v3-builder
-	- docker buildx build --push $(BUILD_ARGS) --platform=$(PLATFORMS) --tag ${IMG} -f Dockerfile .
+	- docker buildx build --build-arg no_proxy --build-arg http_proxy --build-arg https_proxy --push $(BUILD_ARGS) --platform=$(PLATFORMS) --tag ${IMG} -f Dockerfile .
 	- docker buildx rm project-v3-builder
 
 
@@ -120,28 +120,28 @@ docker-buildx: ## Build and push docker image for the manager for cross-platform
 
 .PHONY: install
 install: kustomize ## Install CRDs into the K8s cluster specified in ~/.kube/config.
-	$(KUSTOMIZE) build config/crd | kubectl apply -f -
+	$(KUSTOMIZE) build --build-arg no_proxy --build-arg http_proxy --build-arg https_proxy config/crd | kubectl apply -f -
 
 .PHONY: uninstall
 uninstall: kustomize ## Uninstall CRDs from the K8s cluster specified in ~/.kube/config.
-	$(KUSTOMIZE) build config/crd | kubectl delete -f -
+	$(KUSTOMIZE) build --build-arg no_proxy --build-arg http_proxy --build-arg https_proxy config/crd | kubectl delete -f -
 
 .PHONY: gen-resources
 gen-resources: kustomize ## Generate resources for controller and print to stdout
 	@cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
 	@cd config/default && $(KUSTOMIZE) edit set namespace ${NAMESPACE}
-	@$(KUSTOMIZE) build config/default
+	@$(KUSTOMIZE) build --build-arg no_proxy --build-arg http_proxy --build-arg https_proxy config/default
 
 .PHONY: deploy
 deploy: kustomize ## Deploy controller to the K8s cluster specified in ~/.kube/config.
 	@cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
 	@cd config/default && $(KUSTOMIZE) edit set namespace ${NAMESPACE}
-	@$(KUSTOMIZE) build config/default | kubectl apply -f -
+	@$(KUSTOMIZE) build --build-arg no_proxy --build-arg http_proxy --build-arg https_proxy config/default | kubectl apply -f -
 
 .PHONY: undeploy
 undeploy: ## Undeploy controller from the K8s cluster specified in ~/.kube/config.
 	@cd config/default && $(KUSTOMIZE) edit set namespace ${NAMESPACE}
-	$(KUSTOMIZE) build config/default | kubectl delete -f -
+	$(KUSTOMIZE) build --build-arg no_proxy --build-arg http_proxy --build-arg https_proxy config/default | kubectl delete -f -
 
 OS := $(shell uname -s | tr '[:upper:]' '[:lower:]')
 ARCHA := $(shell uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/')
@@ -199,12 +199,12 @@ endif
 bundle: kustomize operator-sdk ## Generate bundle manifests and metadata, then validate generated files.
 	$(OPERATOR_SDK) generate kustomize manifests -q
 	cd config/manager && $(KUSTOMIZE) edit set image controller=$(IMG)
-	$(KUSTOMIZE) build config/manifests | $(OPERATOR_SDK) generate bundle -q --overwrite --version $(VERSION) $(BUNDLE_METADATA_OPTS)
+	$(KUSTOMIZE) build --build-arg no_proxy --build-arg http_proxy --build-arg https_proxy config/manifests | $(OPERATOR_SDK) generate bundle -q --overwrite --version $(VERSION) $(BUNDLE_METADATA_OPTS)
 	$(OPERATOR_SDK) bundle validate ./bundle
 
 .PHONY: bundle-build
 bundle-build: ## Build the bundle image.
-	${CONTAINER_CMD} build -f bundle.Dockerfile -t $(BUNDLE_IMG) .
+	${CONTAINER_CMD} build --build-arg no_proxy --build-arg http_proxy --build-arg https_proxy -f bundle.Dockerfile -t $(BUNDLE_IMG) .
 
 .PHONY: bundle-push
 bundle-push: ## Push the bundle image.

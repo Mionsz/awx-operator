@@ -9,7 +9,7 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   capacity:
-    storage: 10Gi
+    storage: 50Gi
   storageClassName: standard
   volumeMode: Filesystem
 
@@ -24,6 +24,6 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   capacity:
-    storage: 20Gi
+    storage: 100Gi
   storageClassName: standard
   volumeMode: Filesystem
