@@ -13,5 +13,5 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 images:
 - name: controller
-  newName: quay.io/ansible/awx-operator
+  newName: ger-is-registry.caas.intel.com/nex-vs-cicd-automation/ansible/awx-operator
   newTag: latest

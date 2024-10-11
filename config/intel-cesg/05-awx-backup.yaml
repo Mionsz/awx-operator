@@ -7,8 +7,8 @@ spec:
   deployment_name: cesg-awx
   backup_resource_requirements:
     limits:
-      cpu: "2000m"
-      memory: "4096Mi"
+      cpu: "4000m"
+      memory: "6144Mi"
     requests:
-      cpu: "250m"
-      memory: "64Mi"
+      cpu: "500m"
+      memory: "512Mi"

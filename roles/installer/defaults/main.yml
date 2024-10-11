@@ -460,17 +460,23 @@ postgres_tolerations: |
   - key: "docker-registry"
     operator: "Exists"
     effect: "NoSchedule"
+postgres_storage_class: harvester-longhorn
 postgres_storage_requirements:
   requests:
-    storage: 8Gi
+    storage: 100Gi
+  limits:
+    storage: 100Gi
 postgres_resource_requirements:
   requests:
-    cpu: 250m
-    memory: 256Mi
+    cpu: 750m
+    memory: 3Gi
+  limits:
+    cpu: '2'
+    memory: 5Gi
 postgres_init_container_resource_requirements:
   requests:
-    cpu: 200m
-    memory: 256Mi
+    cpu: 500m
+    memory: 512Mi
 
 # Assign a preexisting priority class to the postgres pod
 postgres_priority_class: ''
@@ -483,7 +489,9 @@ projects_persistence: false
 projects_existing_claim: ''
 #
 # Define postgres configuration arguments to use
-postgres_extra_args: ''
+postgres_extra_args:
+  - '-c'
+  - 'max_connections=1000'
 
 postgres_data_volume_init: false
 postgres_init_container_commands: |

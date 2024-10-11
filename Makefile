@@ -33,7 +33,7 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 #
 # For example, running 'make bundle-build bundle-push catalog-build catalog-push' will build and push both
 # ansible.com/awx-operator-bundle:$VERSION and ansible.com/awx-operator-catalog:$VERSION.
-IMAGE_TAG_BASE ?= ger-is-registry.caas.intel.com/npgcn/ds/ansible/awx-operator
+IMAGE_TAG_BASE ?= ger-is-registry.caas.intel.com/nex-vs-cicd-automation/ansible/awx-operator
 
 # BUNDLE_IMG defines the image:tag used for the bundle.
 # You can use it as an arg. (E.g make bundle-build BUNDLE_IMG=<some-registry>/<project-name-bundle>:<tag>)
@@ -106,42 +106,40 @@ docker-push: ## Push docker image with the manager.
 # - able to use docker buildx . More info: https://docs.docker.com/build/buildx/
 # - have enable BuildKit, More info: https://docs.docker.com/develop/develop-images/build_enhancements/
 # - be able to push the image for your registry (i.e. if you do not inform a valid value via IMG=<myregistry/image:<tag>> than the export will fail)
-# To properly provided solutions that supports more than one platform you should use this option.
-PLATFORMS ?= linux/arm64,linux/amd64,linux/s390x,linux/ppc64le
+# To properly provided solutions that supports more than one platform you should use this option. IMG="ger-is-registry.caas.intel.com/nex-vs-cicd-automation/ansible/awx-operator:latest"
+# PLATFORMS ?= linux/amd64,linux/s390x,linux/ppc64le
+PLATFORMS ?= linux/amd64
 .PHONY: docker-buildx
 docker-buildx: ## Build and push docker image for the manager for cross-platform support
-	- docker buildx create --name project-v3-builder
-	docker buildx use project-v3-builder
-	- docker buildx build --build-arg no_proxy --build-arg http_proxy --build-arg https_proxy --push $(BUILD_ARGS) --platform=$(PLATFORMS) --tag ${IMG} -f Dockerfile .
-	- docker buildx rm project-v3-builder
+	- docker buildx build --build-arg no_proxy --build-arg http_proxy --build-arg https_proxy --push $(BUILD_ARGS) --tag ${IMG} -f Dockerfile .
 
 
 ##@ Deployment
 
 .PHONY: install
 install: kustomize ## Install CRDs into the K8s cluster specified in ~/.kube/config.
-	$(KUSTOMIZE) build --build-arg no_proxy --build-arg http_proxy --build-arg https_proxy config/crd | kubectl apply -f -
+	$(KUSTOMIZE) build config/crd | kubectl apply -f -
 
 .PHONY: uninstall
 uninstall: kustomize ## Uninstall CRDs from the K8s cluster specified in ~/.kube/config.
-	$(KUSTOMIZE) build --build-arg no_proxy --build-arg http_proxy --build-arg https_proxy config/crd | kubectl delete -f -
+	$(KUSTOMIZE) build config/crd | kubectl delete -f -
 
 .PHONY: gen-resources
 gen-resources: kustomize ## Generate resources for controller and print to stdout
 	@cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
 	@cd config/default && $(KUSTOMIZE) edit set namespace ${NAMESPACE}
-	@$(KUSTOMIZE) build --build-arg no_proxy --build-arg http_proxy --build-arg https_proxy config/default
+	@$(KUSTOMIZE) build config/default
 
 .PHONY: deploy
 deploy: kustomize ## Deploy controller to the K8s cluster specified in ~/.kube/config.
 	@cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
 	@cd config/default && $(KUSTOMIZE) edit set namespace ${NAMESPACE}
-	@$(KUSTOMIZE) build --build-arg no_proxy --build-arg http_proxy --build-arg https_proxy config/default | kubectl apply -f -
+	@$(KUSTOMIZE) build config/default | kubectl apply -f -
 
 .PHONY: undeploy
 undeploy: ## Undeploy controller from the K8s cluster specified in ~/.kube/config.
 	@cd config/default && $(KUSTOMIZE) edit set namespace ${NAMESPACE}
-	$(KUSTOMIZE) build --build-arg no_proxy --build-arg http_proxy --build-arg https_proxy config/default | kubectl delete -f -
+	$(KUSTOMIZE) build config/default | kubectl delete -f -
 
 OS := $(shell uname -s | tr '[:upper:]' '[:lower:]')
 ARCHA := $(shell uname -m | sed -e 's/x86_64/amd64/' -e 's/aarch64/arm64/')
@@ -199,7 +197,7 @@ endif
 bundle: kustomize operator-sdk ## Generate bundle manifests and metadata, then validate generated files.
 	$(OPERATOR_SDK) generate kustomize manifests -q
 	cd config/manager && $(KUSTOMIZE) edit set image controller=$(IMG)
-	$(KUSTOMIZE) build --build-arg no_proxy --build-arg http_proxy --build-arg https_proxy config/manifests | $(OPERATOR_SDK) generate bundle -q --overwrite --version $(VERSION) $(BUNDLE_METADATA_OPTS)
+	$(KUSTOMIZE) build config/manifests | $(OPERATOR_SDK) generate bundle -q --overwrite --version $(VERSION) $(BUNDLE_METADATA_OPTS)
 	$(OPERATOR_SDK) bundle validate ./bundle
 
 .PHONY: bundle-build
