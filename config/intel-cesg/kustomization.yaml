@@ -1,15 +1,19 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-resources:
 # Find the latest tag here: https://github.com/ansible/awx-operator/releases
-  - github.com/Mionsz/awx-operator/config/default?ref=latest
-  # - 01-secret.yaml
-  # - 02-pv.yaml
-  # - 03-pvc.yaml
-  # - 04-awx.yaml
-# Set the image tags to match the git version from above
+# - github.com/Mionsz/awx-operator/config/default?ref=latest
+resources:
+- ../crd
+- ../rbac
+- 01-secret.yaml
+- 02-pv.yaml
+- 03-pvc.yaml
+- 04-awx.yaml
+- 05-awx-backup.yaml
+- 06-awx-restore.yaml
 images:
-  - name: ger-is-registry.caas.intel.com/nex-vs-cicd-automation/ansible/awx-operator
-    newTag: latest
+- name: ger-is-registry.caas.intel.com/nex-vs-cicd-automation/ansible/awx-operator
+  newTag: latest
 
-namespace: automation
+namespace: awx
+

@@ -3,12 +3,12 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: awx-projects-volume
-  namespace: automation
+  namespace: awx
 spec:
   accessModes:
     - ReadWriteOnce
   volumeMode: Filesystem
   resources:
     requests:
-      storage: 100Gi
+      storage: 200Gi
   storageClassName: harvester-longhorn

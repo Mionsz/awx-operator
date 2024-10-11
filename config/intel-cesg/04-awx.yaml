@@ -3,7 +3,7 @@ apiVersion: awx.ansible.com/v1beta1
 kind: AWX
 metadata:
   name: cesg-awx
-  namespace: automation
+  namespace: awx
 spec:
   web_resource_requirements:
     requests:
@@ -17,21 +17,22 @@ spec:
     requests:
       cpu: 500m
       memory: 1024M
-
   replicas: 1
   admin_user: admin
   admin_password_secret: awx-admin-password
-
   ingress_type: ingress
   ingress_tls_secret: awx-cesg-fqdn-secret-tls
-  hostname: awx.cesg-poland.igk.intel.com
-
+  hostname: awx.vsval.intel.com
+  projects_persistence: true
+  projects_existing_claim: awx-projects-claim
   postgres_configuration_secret: awx-postgres-configuration
-
-  postgres_storage_class: awx-postgres-volume
+  postgres_storage_class: harvester-longhorn
   postgres_storage_requirements:
     requests:
       storage: 100Gi
-  projects_persistence: true
-  projects_existing_claim: awx-projects-claim
-
+  postgres_image: ger-is-registry.caas.intel.com/nex-vs-cicd-automation/ansible/postgresql-15
+  postgres_image_version: latest
+  postgres_data_volume_init: true
+  postgres_init_container_commands: |
+    chown 26:0 /var/lib/pgsql/data
+    chmod 750 /var/lib/pgsql/data

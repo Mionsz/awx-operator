@@ -28,10 +28,10 @@ spec:
         resources:
           limits:
             cpu: 500m
-            memory: 128Mi
+            memory: 256Mi
           requests:
-            cpu: 5m
-            memory: 64Mi
+            cpu: 500m
+            memory: 128Mi
       - name: awx-manager
         args:
         - "--health-probe-bind-address=:6789"

@@ -1,0 +1,66 @@
+{
+  "apiVersion": "v1",
+  "kind": "Namespace",
+  "metadata": {
+    "annotations": {
+      "cattle.io/status": "{\"Conditions\":[{\"Type\":\"ResourceQuotaInit\",\"Status\":\"True\",\"Message\":\"\",\"LastUpdateTime\":\"2024-08-19T08:18:55Z\"},{\"Type\":\"InitialRolesPopulated\",\"Status\":\"True\",\"Message\":\"\",\"LastUpdateTime\":\"2024-08-19T08:18:55Z\"}]}",
+      "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Namespace\",\"metadata\":{\"annotations\":{\"cattle.io/status\":\"{\\\"Conditions\\\":[{\\\"Type\\\":\\\"ResourceQuotaInit\\\",\\\"Status\\\":\\\"True\\\",\\\"Message\\\":\\\"\\\",\\\"LastUpdateTime\\\":\\\"2024-08-19T08:18:55Z\\\"},{\\\"Type\\\":\\\"InitialRolesPopulated\\\",\\\"Status\\\":\\\"True\\\",\\\"Message\\\":\\\"\\\",\\\"LastUpdateTime\\\":\\\"2024-08-19T08:18:55Z\\\"}]}\",\"lifecycle.cattle.io/create.namespace-auth\":\"true\"},\"creationTimestamp\":\"2024-08-15T20:10:55Z\",\"deletionGracePeriodSeconds\":0,\"deletionTimestamp\":\"2024-09-27T15:29:22Z\",\"finalizers\":[],\"labels\":{\"kubernetes.io/metadata.name\":\"cloudbees-builder\"},\"name\":\"cloudbees-builder\",\"resourceVersion\":\"80498168\",\"uid\":\"040763fc-f319-4482-a7a8-f274afb685b4\"},\"spec\":{},\"status\":{\"conditions\":[{\"lastTransitionTime\":\"2024-09-27T15:29:27Z\",\"message\":\"All resources successfully discovered\",\"reason\":\"ResourcesDiscovered\",\"status\":\"False\",\"type\":\"NamespaceDeletionDiscoveryFailure\"},{\"lastTransitionTime\":\"2024-09-27T15:29:27Z\",\"message\":\"All legacy kube types successfully parsed\",\"reason\":\"ParsedGroupVersions\",\"status\":\"False\",\"type\":\"NamespaceDeletionGroupVersionParsingFailure\"},{\"lastTransitionTime\":\"2024-09-27T15:29:27Z\",\"message\":\"All content successfully deleted, may be waiting on finalization\",\"reason\":\"ContentDeleted\",\"status\":\"False\",\"type\":\"NamespaceDeletionContentFailure\"},{\"lastTransitionTime\":\"2024-09-27T15:29:27Z\",\"message\":\"All content successfully removed\",\"reason\":\"ContentRemoved\",\"status\":\"False\",\"type\":\"NamespaceContentRemaining\"},{\"lastTransitionTime\":\"2024-09-27T15:29:27Z\",\"message\":\"All content-preserving finalizers finished\",\"reason\":\"ContentHasNoFinalizers\",\"status\":\"False\",\"type\":\"NamespaceFinalizersRemaining\"}],\"phase\":\"Terminating\"}}\n",
+      "lifecycle.cattle.io/create.namespace-auth": "true"
+    },
+    "creationTimestamp": "2024-08-15T20:10:55Z",
+    "deletionGracePeriodSeconds": 0,
+    "deletionTimestamp": "2024-09-27T15:29:22Z",
+    "finalizers": [
+      "controller.cattle.io/namespace-auth"
+    ],
+    "labels": {
+      "kubernetes.io/metadata.name": "cloudbees-builder"
+    },
+    "name": "cloudbees-builder",
+    "resourceVersion": "80499031",
+    "uid": "040763fc-f319-4482-a7a8-f274afb685b4"
+  },
+  "spec": {
+    "finalizers": []
+  },
+  "status": {
+    "conditions": [
+      {
+        "lastTransitionTime": "2024-09-27T15:29:27Z",
+        "message": "All resources successfully discovered",
+        "reason": "ResourcesDiscovered",
+        "status": "False",
+        "type": "NamespaceDeletionDiscoveryFailure"
+      },
+      {
+        "lastTransitionTime": "2024-09-27T15:29:27Z",
+        "message": "All legacy kube types successfully parsed",
+        "reason": "ParsedGroupVersions",
+        "status": "False",
+        "type": "NamespaceDeletionGroupVersionParsingFailure"
+      },
+      {
+        "lastTransitionTime": "2024-09-27T15:29:27Z",
+        "message": "All content successfully deleted, may be waiting on finalization",
+        "reason": "ContentDeleted",
+        "status": "False",
+        "type": "NamespaceDeletionContentFailure"
+      },
+      {
+        "lastTransitionTime": "2024-09-27T15:29:27Z",
+        "message": "All content successfully removed",
+        "reason": "ContentRemoved",
+        "status": "False",
+        "type": "NamespaceContentRemaining"
+      },
+      {
+        "lastTransitionTime": "2024-09-27T15:29:27Z",
+        "message": "All content-preserving finalizers finished",
+        "reason": "ContentHasNoFinalizers",
+        "status": "False",
+        "type": "NamespaceFinalizersRemaining"
+      }
+    ],
+    "phase": "Terminating"
+  }
+}

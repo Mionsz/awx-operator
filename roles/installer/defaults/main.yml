@@ -348,18 +348,46 @@ rsyslog_command: []
 
 task_resource_requirements:
   requests:
-    cpu: 350m
-    memory: 256Mi
-
+    cpu: 400m
+    memory: 512Mi
+  limits:
+    cpu: 2000m
+    memory: 6Gi
 web_resource_requirements:
   requests:
-    cpu: 350m
-    memory: 256Mi
-
+    cpu: 300m
+    memory: 512Mi
+  limits:
+    cpu: 2000m
+    memory: 6Gi
 ee_resource_requirements:
   requests:
-    cpu: 350m
-    memory: 256Mi
+    cpu: 300m
+    memory: 512Mi
+  limits:
+    cpu: 2000m
+    memory: 6Gi
+redis_resource_requirements:
+  requests:
+    cpu: 300m
+    memory: 512Mi
+  limits:
+    cpu: 2000m
+    memory: 6Gi
+rsyslog_resource_requirements:
+  requests:
+    cpu: 300m
+    memory: 512Mi
+  limits:
+    cpu: 2000m
+    memory: 4Gi
+init_container_resource_requirements:
+  requests:
+    cpu: 300m
+    memory: 512Mi
+  limits:
+    cpu: 2000m
+    memory: 4Gi
 
 
 # Customize CSRF options
@@ -368,21 +396,6 @@ session_cookie_secure: False
 
 # Assign a preexisting priority class to the control plane pods
 control_plane_priority_class: ''
-
-redis_resource_requirements:
-  requests:
-    cpu: 300m
-    memory: 256Mi
-
-rsyslog_resource_requirements:
-  requests:
-    cpu: 300m
-    memory: 256Mi
-
-init_container_resource_requirements:
-  requests:
-    cpu: 300m
-    memory: 256Mi
 
 # Add extra environment variables to the AWX task/web containers. Specify as
 # literal block. E.g.:

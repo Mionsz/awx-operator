@@ -6,4 +6,4 @@ resources:
 - bases/awx.ansible.com_awxbackups.yaml
 - bases/awx.ansible.com_awxrestores.yaml
 - bases/awx.ansible.com_awxmeshingresses.yaml
-#+kubebuilder:scaffold:crdkustomizeresource
+# - kubebuilder:scaffold:crdkustomizeresource

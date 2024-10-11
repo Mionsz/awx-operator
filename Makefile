@@ -52,7 +52,7 @@ endif
 
 # Image URL to use all building/pushing image targets
 IMG ?= $(IMAGE_TAG_BASE):$(VERSION)
-NAMESPACE ?= automation
+NAMESPACE ?= awx
 
 # Helm variables
 CHART_NAME ?= cesg-awx-operator

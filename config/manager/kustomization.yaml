@@ -1,6 +1,7 @@
 resources:
 - manager.yaml
 
+namespace: awx
 generatorOptions:
   disableNameSuffixHash: true
 

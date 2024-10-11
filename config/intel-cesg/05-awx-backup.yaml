@@ -1,8 +1,9 @@
+---
 apiVersion: awx.ansible.com/v1beta1
 kind: AWXBackup
 metadata:
   name: cesg-awx-backup
-  namespace: automation
+  namespace: awx
 spec:
   deployment_name: cesg-awx
   backup_resource_requirements:
