@@ -9,11 +9,13 @@ resources:
 - 02-pv.yaml
 - 03-pvc.yaml
 - 04-awx.yaml
-- 05-awx-backup.yaml
-- 06-awx-restore.yaml
+# - 05-awx-backup.yaml
+# - 06-awx-restore.yaml
 images:
 - name: ger-is-registry.caas.intel.com/nex-vs-cicd-automation/ansible/awx-operator
   newTag: latest
-
+# postgres_initdb_args: "--set huge_pages=off"
 namespace: awx
 
+# patches:
+# - path:

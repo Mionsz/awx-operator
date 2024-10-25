@@ -7,25 +7,38 @@ metadata:
 spec:
   web_resource_requirements:
     requests:
-      cpu: 500m
+      cpu: 1500m
       memory: 1024M
   task_resource_requirements:
     requests:
-      cpu: 500m
+      cpu: 1000m
       memory: 1024M
   ee_resource_requirements:
     requests:
-      cpu: 500m
+      cpu: 2000m
       memory: 1024M
+  postgres_resource_requirements:
+    limits:
+      hugepages-2Mi: 2Gi
+      cpu: 2000m
+      memory: 2048M
+    requests:
+      hugepages-2Mi: 2Gi
+      cpu: 2000m
+      memory: 2048M
   replicas: 1
   admin_user: admin
   admin_password_secret: awx-admin-password
   ingress_type: ingress
   ingress_tls_secret: awx-cesg-fqdn-secret-tls
+  image_version: latest
+  ee_images:
+    - name: intel-awx-ee
+      image: ger-is-registry.caas.intel.com/nex-vs-cicd-automation/ansible/awx-ee
   hostname: awx.vsval.intel.com
-  projects_persistence: true
-  projects_existing_claim: awx-projects-claim
-  postgres_configuration_secret: awx-postgres-configuration
+  projects_persistence: false
+  # projects_existing_claim: awx-projects-claim
+  # postgres_configuration_secret: awx-postgres-configuration
   postgres_storage_class: harvester-longhorn
   postgres_storage_requirements:
     requests:
@@ -36,3 +49,5 @@ spec:
   postgres_init_container_commands: |
     chown 26:0 /var/lib/pgsql/data
     chmod 750 /var/lib/pgsql/data
+    echo "POSTGRESQL_ENABLE_TLS=no" >> /etc/environment
+    echo "POSTGRESQL_ENABLE_LDAP=no" >> /etc/environment

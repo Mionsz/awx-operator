@@ -20,13 +20,13 @@
           spec:
             admin_user: admin
             admin_email: admin@localhost
-            service_type: "{{ service_type | default(omit) }}"  # Either clusterIP, Loadbalancer or NodePort
-            ingress_type: "{{ ingress_type | default(omit) }}"  # Either none, Ingress, Route
+            service_type: "NodePort"  # Either clusterIP, Loadbalancer or NodePort
+            ingress_type: "Ingress"  # Either none, Ingress, Route
             image: "{{ image | default(omit) }}"
             image_version: "{{ image_version | default(omit) }}"
             development_mode: "{{ development_mode | default(omit) | bool }}"
             image_pull_policy: "{{ image_pull_policy | default(omit) }}"
             nodeport_port: "{{ nodeport_port | default(omit) }}"
-            # ee_images:
-            #   - name: test-ee
-            #     image: quay.io/<user>/awx-ee
+            ee_images:
+            - name: nex-vsval-awx-ee
+              image: ger-is-registry.caas.intel.com/nex-vs-cicd-automation/ansible/awx-ee

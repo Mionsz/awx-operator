@@ -481,9 +481,11 @@ postgres_storage_requirements:
     storage: 100Gi
 postgres_resource_requirements:
   requests:
+    hugepages-2Mi: 1Gi
     cpu: 750m
     memory: 3Gi
   limits:
+    hugepages-2Mi: 1Gi
     cpu: '2'
     memory: 5Gi
 postgres_init_container_resource_requirements:

@@ -1,3 +1,9 @@
+make docker-buildx
+make install
+make deploy
+cd config/intel-cesg
+kubectl apply -k .
+
 # AWX Operator
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)

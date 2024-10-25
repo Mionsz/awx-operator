@@ -106,7 +106,8 @@ docker-push: ## Push docker image with the manager.
 # - able to use docker buildx . More info: https://docs.docker.com/build/buildx/
 # - have enable BuildKit, More info: https://docs.docker.com/develop/develop-images/build_enhancements/
 # - be able to push the image for your registry (i.e. if you do not inform a valid value via IMG=<myregistry/image:<tag>> than the export will fail)
-# To properly provided solutions that supports more than one platform you should use this option. IMG="ger-is-registry.caas.intel.com/nex-vs-cicd-automation/ansible/awx-operator:latest"
+# To properly provided solutions that supports more than one platform you should use this option.
+# IMG="ger-is-registry.caas.intel.com/nex-vs-cicd-automation/ansible/awx-operator:latest"
 # PLATFORMS ?= linux/amd64,linux/s390x,linux/ppc64le
 PLATFORMS ?= linux/amd64
 .PHONY: docker-buildx

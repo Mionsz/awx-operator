@@ -472,9 +472,6 @@ spec:
             - name: AWX_KUBE_DEVEL
               value: "1"
 {% endif %}
-{% if rsyslog_extra_env -%}
-            {{ rsyslog_extra_env | indent(width=12, first=True) }}
-{% endif %}
 {% if task_node_selector %}
       nodeSelector:
         {{ task_node_selector | indent(width=8) }}

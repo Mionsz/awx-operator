@@ -1805,6 +1805,10 @@ spec:
                 properties:
                   requests:
                     properties:
+                      hugepages-1Gi:
+                        type: string
+                      hugepages-2Mi:
+                        type: string
                       cpu:
                         type: string
                       memory:
@@ -1812,6 +1816,10 @@ spec:
                     type: object
                   limits:
                     properties:
+                      hugepages-1Gi:
+                        type: string
+                      hugepages-2Mi:
+                        type: string
                       cpu:
                         type: string
                       memory:

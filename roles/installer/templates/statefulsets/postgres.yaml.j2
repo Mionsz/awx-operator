@@ -64,6 +64,13 @@ spec:
               {{ postgres_init_container_commands | indent(width=14) }}
           resources: {{ postgres_init_container_resource_requirements | default(postgres_resource_requirements) }}
           volumeMounts:
+            - mountPath: /tmp
+              name: empty-dir
+              subPath: tmp-dir
+            - mountPath: /dev/shm
+              name: dshm
+            - mountPath: /hugepages-2Mi
+              name: hugepage-2mi
             - name: postgres-{{ supported_pg_version }}
               mountPath: '{{ _postgres_data_path | dirname }}'
               subPath: '{{ _postgres_data_path | dirname | basename }}'
@@ -134,6 +141,13 @@ spec:
             - containerPort: {{ awx_postgres_port | default('5432')}}
               name: postgres-{{ supported_pg_version }}
           volumeMounts:
+            - mountPath: /tmp
+              name: empty-dir
+              subPath: tmp-dir
+            - mountPath: /dev/shm
+              name: dshm
+            - mountPath: /hugepages-2Mi
+              name: hugepage-2mi
             - name: postgres-{{ supported_pg_version }}
               mountPath: '{{ _postgres_data_path | dirname }}'
               subPath: '{{ _postgres_data_path | dirname | basename }}'
@@ -149,8 +163,16 @@ spec:
       tolerations:
         {{ postgres_tolerations | indent(width=8) }}
 {% endif %}
-{% if postgres_extra_volumes %}
       volumes:
+        - name: hugepage-2mi
+          emptyDir:
+            medium: HugePages-2Mi
+        - emptyDir: {}
+          name: empty-dir
+        - emptyDir:
+            medium: Memory
+          name: dshm
+{% if postgres_extra_volumes %}
         {{ postgres_extra_volumes | indent(width=8, first=False) }}
 {% endif %}
   volumeClaimTemplates:

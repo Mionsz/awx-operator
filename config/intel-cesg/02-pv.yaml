@@ -21,7 +21,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: awx-projects-volume
+  name: awx-projects-claim
   namespace: awx
 spec:
   accessModes:
@@ -34,4 +34,4 @@ spec:
   csi:
     driver: driver.longhorn.io
     fsType: ext4
-    volumeHandle: awx-projects-volume
+    volumeHandle: awx-projects-claim
